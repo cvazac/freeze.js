@@ -1,23 +1,21 @@
 # freeze.js
-freeze natives
+Freeze constructors, methods, and properties
 
 ## Usage (freeze)
 ```javascript
-const {freeze} = require('freeze.js')
+const {freeze, unfreeze} = require('freeze.js')
 freeze('console.clear')
 freeze('document.readyState')
+freeze('XMLHttpRequest')
+freeze('XMLHttpRequest.prototype.open')
+freeze('MyClass.prototype.method')
 ```
 
-Any attempts to patch `console.clear` will nop.
+Any attempts to patch `console.clear`, `document.readyState`, `XMLHttpRequest`, `XMLHttpRequest.prototype.open`, or `MyClass.prototype.method` will silently nop.
 
-## Usage (unfreeze)
-```javascript
-const {unfreeze} = require('freeze.js')
-unfreeze('console.clear')
-```
+Use `unfreeze(...)` to reverse.
 
 ## Tests
-
 ```
 npm run test
 ```
