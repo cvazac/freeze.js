@@ -15,7 +15,6 @@
       obj: parse.obj,
       prop: parse.prop
     }
-    console.info(key, keys[key], parse.obj === XMLHttpRequest.prototype, parse.obj === XMLHttpRequest)
 
     if (!natives['Object.defineProperty']) {
       // nop changes to the property descriptor for all of our `obj.prop` tuples

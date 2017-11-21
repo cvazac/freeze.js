@@ -1,6 +1,7 @@
 const test = require('tape')
 const {freeze, unfreeze} = require('../index')
 
+// happy paths
 test('Freeze and Unfreeze `Object.method1()`', function(assert) {
   const testMethod = 'method1'
   Object[testMethod] = function() { return 1 }
@@ -69,6 +70,9 @@ test('Freeze and Unfreeze several methods', function(assert) {
   assert.end();
 })
 
+// TODO add tests against Object.defineProperty & Object.assign
+
+// unhappy paths
 test('Multiple calls to `freeze()` will nop', function(assert) {
   const testMethod = 'method3'
   Object[testMethod] = function() { return 1 }
