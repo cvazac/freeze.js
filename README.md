@@ -5,6 +5,7 @@ freeze natives
 ```javascript
 const {freeze} = require('freeze.js')
 freeze('console.clear')
+freeze('document.readyState')
 ```
 
 Any attempts to patch `console.clear` will nop.

@@ -71,8 +71,9 @@
   }
 
   function shouldNopDefineProperty(obj, prop) {
-    for (var i = 0; i < Object.keys(keys); i++) {
-      if (keys[i].obj === obj && keys[i].prop === prop) {
+    for (var key in keys) {
+      if (keys.hasOwnProperty(key) &&
+        keys[key].obj === obj && keys[key].prop === prop) {
         return true
       }
     }
