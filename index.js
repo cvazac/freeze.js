@@ -1,5 +1,5 @@
 ;(function() {
-  var nativeDefineProperty, keys = {}
+  var natives = {}, keys = {}
 
   function freeze(key) {
     if (keys.hasOwnProperty(key)) return false
@@ -15,18 +15,36 @@
       obj: parse.obj,
       prop: parse.prop
     }
+    console.info(key, keys[key], parse.obj === XMLHttpRequest.prototype, parse.obj === XMLHttpRequest)
 
-    if (!nativeDefineProperty) {
+    if (!natives['Object.defineProperty']) {
       // nop changes to the property descriptor for all of our `obj.prop` tuples
-      nativeDefineProperty = Object.defineProperty
+      natives['Object.defineProperty'] = Object.defineProperty
       Object.defineProperty = function (obj, prop, descriptor) {
         return shouldNopDefineProperty(obj, prop)
           ? obj
-          : nativeDefineProperty.apply(undefined, arguments)
+          : natives['Object.defineProperty'].apply(undefined, arguments)
+      }
+    }
+    if (!natives['Object.assign']) {
+      natives['Object.assign'] = Object.assign
+      Object.assign = function () {
+        var args = Array.prototype.slice.call(arguments)
+        for (var i = 1; i < args.length; i++) {
+          if (args[i]) {
+            for (var key in keys) {
+              if (keys.hasOwnProperty(key)) {
+                delete args[i][keys[key].prop]
+              }
+            }
+          }
+        }
+
+        return natives['Object.assign'].apply(undefined, args)
       }
     }
 
-    nativeDefineProperty(obj, prop, {
+    natives['Object.defineProperty'](obj, prop, {
       set: function (value) {
         if (keys[key] && !keys[key].frozen) {
           keys[key].closed = value
