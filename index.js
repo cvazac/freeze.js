@@ -56,7 +56,7 @@
     return true
   }
 
-  function unfreeze(key) {
+  function thaw(key) {
     if (!keys.hasOwnProperty(key) || !keys[key].frozen) return false
 
     keys[key].closed = keys[key].frozen
@@ -99,6 +99,6 @@
 
   module.exports = {
     freeze: freeze,
-    unfreeze: unfreeze,
+    thaw: thaw,
   }
 })()

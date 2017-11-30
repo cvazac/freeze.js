@@ -1,5 +1,5 @@
 const test = require('tape')
-const {freeze, unfreeze} = require('../index')
+const {freeze, thaw} = require('../index')
 
 // happy paths
 test('Freeze and Unfreeze `Object.method1()`', function(assert) {
@@ -11,7 +11,7 @@ test('Freeze and Unfreeze `Object.method1()`', function(assert) {
   assert.is(Object[testMethod](), 1) // is original
   Object[testMethod] = function() { return 2 } // should NOT patch testMethod
   assert.is(Object[testMethod](), 1) // is original
-  assert.true(unfreeze('Object.' + testMethod)) // should unfreeze testMethod
+  assert.true(thaw('Object.' + testMethod)) // should thaw testMethod
   assert.is(Object[testMethod](), 1) // is original
   Object[testMethod] = function() { return 2 } // should patch testMethod
   assert.is(Object[testMethod](), 2) // is patched
@@ -52,7 +52,7 @@ test('Freeze and Unfreeze several methods', function(assert) {
   })
 
   testMethods.forEach(function(testMethod) {
-    assert.true(unfreeze(testMethod)) // should unfreeze testMethod
+    assert.true(thaw(testMethod)) // should thaw testMethod
   })
 
   testMethods.forEach(function(testMethod) {
@@ -84,15 +84,15 @@ test('Multiple calls to `freeze()` will nop', function(assert) {
   assert.end();
 })
 
-test('Multiple calls to `unfreeze()` will nop', function(assert) {
+test('Multiple calls to `thaw()` will nop', function(assert) {
   const testMethod = 'method4'
   Object[testMethod] = function() { return 1 }
 
-  assert.false(unfreeze('Object.' + testMethod)) // should NOT unfreeze testMethod
+  assert.false(thaw('Object.' + testMethod)) // should NOT thaw testMethod
   assert.true(freeze('Object.' + testMethod)) // should freeze testMethod
-  assert.true(unfreeze('Object.' + testMethod)) // should unfreeze testMethod
-  assert.false(unfreeze('Object.' + testMethod)) // should NOT unfreeze testMethod
-  assert.false(unfreeze('Object.' + testMethod)) // should NOT unfreeze testMethod
+  assert.true(thaw('Object.' + testMethod)) // should thaw testMethod
+  assert.false(thaw('Object.' + testMethod)) // should NOT thaw testMethod
+  assert.false(thaw('Object.' + testMethod)) // should NOT thaw testMethod
 
   assert.end();
 })
@@ -102,7 +102,7 @@ test('freeze() will nop for unfound refereces', function(assert) {
   assert.end();
 })
 
-test('unfreeze() will nop for unfound refereces', function(assert) {
-  assert.false(unfreeze('Object.method5')) // should NOT unfreeze non-existant reference
+test('thaw() will nop for unfound refereces', function(assert) {
+  assert.false(thaw('Object.method5')) // should NOT thaw non-existant reference
   assert.end();
 })
